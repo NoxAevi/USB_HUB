@@ -5,7 +5,15 @@ description: "USB hub"
 created_at: "2026-07-18"
 ---
 
-# 7/21/26:
+# 7/21/26: Quick update on MCP22301
+
+<img width="1266" height="220" alt="image" src="https://github.com/user-attachments/assets/d7a17c2a-ee7e-43ef-adce-258f36778beb" />
+
+AKA this chip won't really work (though I pretty much already decided to redrive USB PD)
+
+**Total Time Spent:** 5m
+
+# 7/21/26: USB PD passthrough research
 
 On some time that I didn't track, I did some research about having the charging configuration in the design, and it seemed that the one in the USB hub IC only supports up to 5V (and that's kinda low for a laptop)
 
