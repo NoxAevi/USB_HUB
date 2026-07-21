@@ -5,6 +5,50 @@ description: "USB hub"
 created_at: "2026-07-18"
 ---
 
+# 7/21/26:
+
+On some time that I didn't track, I did some research about having the charging configuration in the design, and it seemed that the one in the USB hub IC only supports up to 5V (and that's kinda low for a laptop)
+
+Thus, I began looking at USB PD controllers on their website, and found the MCP22301, which has something pretty similar to what I need
+
+<img width="693" height="694" alt="image" src="https://github.com/user-attachments/assets/a4d99bf4-07f2-4174-8681-9ff98e238e59" />
+
+However, according to a [reddit post](https://www.reddit.com/r/microchip/comments/1p35evk/power_delivery_stack_hardware_firmware_support/), they've had mid support and haven't been able to provide precise instructions on how to implement this charge-through feature
+
+(This is just the summary of what I determined, but did quite a bit of searching outside of that)
+
+For now, I'll be looking into TI PD controllers
+
+Most of the ones I looked at were for automotive uses (and since you can't really charge a car via usb-c, none of the intended applications were even close to matching)
+
+I did find the TPS65982DMC, which is really close to what I'm looking for
+
+However, I'd have to lose one of the ports entirely and use a barrel jack for power (not to mention that the footprint is BGA, so I'm basically locked into jlcpcb parts [and the parts I'm using don't really have huge stocks, so they might run out], meaning I'd have to at least buy twice of everything too)
+
+<img width="1239" height="712" alt="image" src="https://github.com/user-attachments/assets/d5da9917-f40b-4ef5-94da-4956f457345d" />
+
+I then looked into Analog Devices and found nothing of note that could be used for this
+
+Same for infineon (most of their stuff uses another mcu to communicate what standard, though this does give me the idea of using an MCU/PD detector IC [if those exist] and then use that to communicate a standard with the PD IC, though if possible I'd like to avoid this)
+
+After more searching, there really isn't anything that fit my criteria
+
+After looking a bit on reddit, I found [this](https://medium.com/@kolluru.nathan/usb-pd-power-reserve-and-you-71cf4d18505c) article, which gave an interesting idea about redriving PD after taking in PD power (this is similar to the idea before, but I'd in theory be asking for the highest voltage the charger can provide, then stepping it down into a system voltage, and supplying it to a USB PD controller which then negotiates with the host device)
+
+<img width="1071" height="285" alt="image" src="https://github.com/user-attachments/assets/74b0729e-c94d-447a-91dd-c45afb15b425" />
+
+
+Since the article also mentions stuff like being able to only have a specific amount of delay, the first option (of using an MCU to act as the middleman) is much more risky (as there's a chance of it being too slow). Thus, I'll be using the second option (from the article)
+
+This means that next session I'll have to find:
+
+* A way to determine which side is the host
+* A way to determine PD capabilities on the charger side (this doesn't need to be a data port anymore, so i can have 2 usb c ports [yippee!!])
+* A way to negotiate with the host what voltage they would like to receive (at most one voltage step under the supply, accounting for power used in the dock itself, but i gotta research this more to know how strict this is)
+* Make sure I don't forget to set the other ports properly (downstream, DP, HDMI, etc.)
+
+**Total Time Spent:** 2h
+
 # 7/18/26: Initial Research (USB HUB IC found, but still confused)
 
 The obvious first step in designing a USB hub would be to decide what ports I wanted it to have, and I eventually decided on these
