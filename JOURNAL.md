@@ -5,6 +5,32 @@ description: "USB hub"
 created_at: "2026-07-18"
 ---
 
+# 7/23/26: Where to go from here
+
+After reflecting on both this project and the project I did before, I've realized that I've been trying to do too many new things at once
+
+For example, in this project, it'd be my first time implementing USB SS (which I somewhat understand) as well as my first time exploring USB PD (which still confuses me quite a bit)
+
+It'd be a bummer if I finished this project only to find that everything except something like USB PD works (and since a lot of the parts, like the high-speed usb hub controller cost a lot, it'd be difficult to reassemble it & more expensive for revisions)
+
+Thus, I'm going to be placing this project on hold and making a MUCH smaller scale one
+
+What I plan to do is to make a barebones implementation of USB PD passthrough with a USB hub (so three ports: 1 for host, 1 for charger/data, 1 for data)
+
+I also did some more (re)research on PD controllers during this time, mainly the ones by TI (i mean they had the largest selection by far) to see if I could do anything with them
+
+Looking at their USBCPD software application (yeah USB PD seems complicated enough that it warrants using stuff like this to program it -- ouch), it seems that I might be able to set up something to auto negotiate as a sink as well as trigger a GPIO event to communicate with the host-side (source) PD controller to determine what it should advertise to the host
+
+<img width="1201" height="175" alt="image" src="https://github.com/user-attachments/assets/eb83a11c-3e3f-45b7-8fe3-7efbd989d29e" />
+
+<img width="1213" height="235" alt="image" src="https://github.com/user-attachments/assets/5f5cd2ac-681a-488e-8c2a-cc1d91dff91f" />
+
+(These both are on different application notes for some reason, but wasn't too hard to find)
+
+Anyways, before moving on to the other project, I'll email TI to confirm if using this would work for my application
+
+**Total Time Spent:** 30m
+
 # 7/21/26: Quick update on MCP22301
 
 <img width="1266" height="220" alt="image" src="https://github.com/user-attachments/assets/d7a17c2a-ee7e-43ef-adce-258f36778beb" />
